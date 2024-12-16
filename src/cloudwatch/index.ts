@@ -1,8 +1,9 @@
 import { CloudWatchLogsClient, GetLogEventsCommand, DescribeLogStreamsCommand, DescribeLogStreamsCommandOutput, LogStream, GetLogEventsCommandOutput } from "@aws-sdk/client-cloudwatch-logs";
 import { strict as assert } from "node:assert";
 
-async function getLogEvents(region: string, logGroup: string) {
+async function getLogEvents(region: string, logGroup: string | undefined): Promise<void> {
 	assert(region, 'region is required');
+	assert(logGroup, 'logGroup is required');
 	const client = new CloudWatchLogsClient({ region: region });
 	let nextToken: string | undefined = undefined;
 		do {

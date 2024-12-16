@@ -1,4 +1,5 @@
 import { listLambdas } from "./lambda/index.js";
+import { getLogEvents } from "./cloudwatch/index.js";
 import { FunctionConfiguration } from "@aws-sdk/client-lambda";
 
 const regionList: string[] = [
@@ -17,7 +18,7 @@ function main() {
 	}
 
 	Promise.all(promiseList).then((results: FunctionConfiguration[][]) => {
-		console.log("Results: ", results);
+		getLogEvents(regionList[0], results[0][0].FunctionName);
 	});
 };
 
