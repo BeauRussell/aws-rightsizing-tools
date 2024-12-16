@@ -1,6 +1,8 @@
 import { CloudWatchLogsClient, GetLogEventsCommand, DescribeLogStreamsCommand, DescribeLogStreamsCommandOutput, LogStream, GetLogEventsCommandOutput } from "@aws-sdk/client-cloudwatch-logs";
+import { strict as assert } from "node:assert";
 
 async function getLogEvents(region: string, logGroup: string) {
+	assert(region, 'region is required');
 	const client = new CloudWatchLogsClient({ region: region });
 	let nextToken: string | undefined = undefined;
 		do {
@@ -24,7 +26,7 @@ async function getLogEvents(region: string, logGroup: string) {
 		const getEventsCommand = new GetLogEventsCommand({ logGroupName: logGroup, logStreamName: stream.logStreamName });
 		const getEventsResponse: GetLogEventsCommandOutput = await client.send(getEventsCommand);
 
-		console.log(getEventsResponse.events[0]);
+		console.log(getEventsResponse.events![0]);
 
 	} while (nextToken);
 }
