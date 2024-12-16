@@ -27,7 +27,7 @@ async function getLogEvents(region: string, logGroup: string | undefined): Promi
 		const getEventsCommand = new GetLogEventsCommand({ logGroupName: logGroup, logStreamName: stream.logStreamName });
 		const getEventsResponse: GetLogEventsCommandOutput = await client.send(getEventsCommand);
 
-		console.log(getEventsResponse.events![0]);
+		console.log(getEventsResponse);
 
 	} while (nextToken);
 }
