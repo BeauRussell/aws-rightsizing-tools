@@ -12,13 +12,13 @@ const regionList: string[] = [
 
 function main() {
 	const promiseList: Promise<FunctionConfiguration[]>[] = [];
-	for const region of regionList {
+	for (const region of regionList) {
 		promiseList.push(listLambdas(region));
 	}
 
-	Promises.all(promiseList).then((results) => {
+	Promise.all(promiseList).then((results: FunctionConfiguration[][]) => {
 		console.log("Results: ", results);
-	}
-}
+	});
+};
 
 main();
