@@ -24,7 +24,7 @@ async function getLogEvents(region: string, logGroup: string) {
 		const getEventsCommand = new GetLogEventsCommand({ logGroupName: logGroup, logStreamName: stream.logStreamName });
 		const getEventsResponse: GetLogEventsCommandOutput = await client.send(getEventsCommand);
 
-		console.log(getEventsResponse.event[0]);
+		console.log(getEventsResponse.events[0]);
 
 	} while (nextToken);
 }
