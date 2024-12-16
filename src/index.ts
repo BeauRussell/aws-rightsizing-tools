@@ -18,7 +18,7 @@ function main() {
 	}
 
 	Promise.all(promiseList).then((results: FunctionConfiguration[][]) => {
-		getLogEvents(regionList[0], results[0][0].FunctionName);
+		getLogEvents(regionList[0], `/aws/lambda/${results[0][0].FunctionName}`);
 	});
 };
 
