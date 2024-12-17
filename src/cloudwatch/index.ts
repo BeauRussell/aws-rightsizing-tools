@@ -79,7 +79,7 @@ function processMessages(results: ResultField[][]): [number, number] {
 }
 
 function checkMemoryMaxed(message: string): boolean {
-	const regex = /Memory Size: ([0-9]*)|Max Memory Used: ([0-9]*)/
+	const regex = /Memory Size: ([0-9]*).*Max Memory Used: ([0-9]*)/;
 	const match = message.match(regex);
 	if (match && match.length > 0) {
 		const maxMemoryUsed = parseInt(match[2]);
