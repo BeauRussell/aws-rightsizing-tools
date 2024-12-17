@@ -1,4 +1,4 @@
-import { CloudWatchLogsClient, GetQueryResultsCommandInput, GetQueryResultsCommand, GetQueryResultsCommandOutput, StartQueryCommandInput, StartQueryCommand, StartQueryCommandOutput } from "@aws-sdk/client-cloudwatch-logs";
+import { CloudWatchLogsClient, GetQueryResultsCommandInput, GetQueryResultsCommand, GetQueryResultsCommandOutput, StartQueryCommandInput, StartQueryCommand, StartQueryCommandOutput, ResourceNotFoundException } from "@aws-sdk/client-cloudwatch-logs";
 import { strict as assert } from "node:assert";
 
 async function getLogEvents(region: string, logGroup: string | undefined): Promise<void> {
@@ -39,7 +39,11 @@ async function getLogEvents(region: string, logGroup: string | undefined): Promi
 			}, 60000);
 		}
 	} catch (err) {
-		console.error(err);
+		if (err instanceof ResourceNotFoundException) {
+			return;
+		} else {
+			console.error(err);
+		}
 	}
 }
 
