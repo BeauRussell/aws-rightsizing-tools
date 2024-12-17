@@ -3,7 +3,7 @@ import { getLogEvents } from "./cloudwatch/index.js";
 import { FunctionConfiguration } from "@aws-sdk/client-lambda";
 import pLimit from "p-limit";
 
-const CONCURRENCY_LIMIT = 100;
+const CONCURRENCY_LIMIT = 10;
 const limit = pLimit(CONCURRENCY_LIMIT);
 
 const regionList: string[] = [
