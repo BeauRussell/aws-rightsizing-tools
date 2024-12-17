@@ -34,8 +34,10 @@ async function finalizeFile(filePath: string) {
 }
 
 async function main() {
-    const filePath = "./lambdaInfo.json"; // Path for output JSON file
-    await initializeFile(filePath);
+    const allLambdasFilePath = "./lambdaInfo.json";
+	const problemLambdasFilePath = "./problemLambdas.json";
+    await initializeFile(allLambdasFilePath);
+	await initializeFile(problemLambdasFilePath);
 
     const promiseList: Promise<FunctionConfiguration[]>[] = [];
     for (const region of regionList) {
@@ -90,7 +92,10 @@ async function main() {
                     // Append each resolved item to the JSON file
                     const isLast = completedCount === totalLambdas;
 					if (stats[1] !== 0) {
-                    	await appendToFile(filePath, info, isLast);
+                    	await appendToFile(allLambdasFilePath, info, isLast);
+						if (info.percentMaxMemoryUsed > 50)  {
+							await appendToFile(problemLambdasFilePath, info, isLast);
+						}
 					}
 
                     // Update the progress bar
@@ -105,7 +110,8 @@ async function main() {
     }
 
     await Promise.all(processingPromises);
-    await finalizeFile(filePath);
+    await finalizeFile(allLambdasFilePath);
+	await finalizeFile(problemLambdasFilePath);
 
     // Stop the progress bar
     progressBar.stop();
