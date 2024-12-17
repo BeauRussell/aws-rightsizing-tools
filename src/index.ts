@@ -5,7 +5,7 @@ import pLimit from "p-limit";
 import { writeFile, appendFile } from "fs/promises";
 import cliProgress from "cli-progress";
 
-const CONCURRENCY_LIMIT = 20;
+const CONCURRENCY_LIMIT = 10;
 const limit = pLimit(CONCURRENCY_LIMIT);
 
 const regionList: string[] = [
