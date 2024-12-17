@@ -18,7 +18,11 @@ function main() {
 	}
 
 	Promise.all(promiseList).then((results: FunctionConfiguration[][]) => {
-		getLogEvents(regionList[0], `/aws/lambda/${results[0][0].FunctionName}`);
+		for (const regionIdx in results) {
+			for (const lambda of results[regionIdx]) {
+				getLogEvents(regionList[regionIdx], `/aws/lambda/${lambda.FunctionName}`);
+			}
+		}
 	});
 };
 

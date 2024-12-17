@@ -23,12 +23,14 @@ async function getLogEvents(region: string, logGroup: string | undefined): Promi
 		const queryId: string | undefined = response.queryId;
 
 		if (queryId) {
-			let results: GetQueryResultsCommandOutput;
-			const resultsParams: GetQueryResultsCommandInput = {
-				queryId: queryId,
-			};
-			results  = await client.send(new GetQueryResultsCommand(resultsParams));
-			console.log(results);
+			setTimeout(async () => {
+				let results: GetQueryResultsCommandOutput;
+				const resultsParams: GetQueryResultsCommandInput = {
+					queryId: queryId,
+				};
+				results  = await client.send(new GetQueryResultsCommand(resultsParams));
+				console.log(results);
+			}, 60000);
 		}
 	} catch (err) {
 		console.error(err);
