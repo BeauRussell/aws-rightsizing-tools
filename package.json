@@ -1,18 +1,19 @@
 {
 	"type": "module",
-  "devDependencies": {
-    "@eslint/js": "^9.17.0",
-    "eslint": "^9.17.0",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.18.1"
-  },
-  "dependencies": {
-    "@aws-sdk/client-cloudwatch-logs": "^3.713.0",
-    "@aws-sdk/client-lambda": "^3.712.0",
-    "@types/aws-lambda": "^8.10.146",
-    "@types/node": "^22.10.2",
-    "aws-sdk": "^2.1692.0",
-    "cli-progress": "^3.12.0",
-    "p-limit": "^6.1.0"
-  }
+	"devDependencies": {
+		"@eslint/js": "^9.17.0",
+		"@types/cli-progress": "^3.11.6",
+		"eslint": "^9.17.0",
+		"typescript": "^5.7.2",
+		"typescript-eslint": "^8.18.1"
+	},
+	"dependencies": {
+		"@aws-sdk/client-cloudwatch-logs": "^3.713.0",
+		"@aws-sdk/client-lambda": "^3.712.0",
+		"@types/aws-lambda": "^8.10.146",
+		"@types/node": "^22.10.2",
+		"aws-sdk": "^2.1692.0",
+		"cli-progress": "^3.12.0",
+		"p-limit": "^6.1.0"
+	}
 }
