@@ -18,11 +18,23 @@ function main() {
 	}
 
 	Promise.all(promiseList).then(async (results: FunctionConfiguration[][]) => {
+		const lambdaInfo: { 
+			region: string;
+			lambda: string;
+			runInfo: Promise<[number, number] | undefined>;
+		}[] =[];
 		for (const regionIdx in results) {
 			for (const lambda of results[regionIdx]) {
-				await getLogEvents(regionList[regionIdx], `/aws/lambda/${lambda.FunctionName}`);
+				const queryInfo: Promise<[number, number]| undefined> = getLogEvents(regionList[regionIdx], `/aws/lambda/${lambda.FunctionName}`);
+				lambdaInfo.push({
+					region: regionList[regionIdx],
+					lambda: lambda.FunctionName!,
+					runInfo: queryInfo,
+				});
 			}
 		}
+		console.log(lambdaInfo);
+		console.log(await lambdaInfo[0].runInfo);
 	});
 };
 

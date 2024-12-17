@@ -1,7 +1,7 @@
 import { CloudWatchLogsClient, GetQueryResultsCommandInput, GetQueryResultsCommand, GetQueryResultsCommandOutput, StartQueryCommandInput, StartQueryCommand, StartQueryCommandOutput, ResourceNotFoundException, ResultField } from "@aws-sdk/client-cloudwatch-logs";
 import { strict as assert } from "node:assert";
 
-async function getLogEvents(region: string, logGroup: string | undefined): Promise<void> {
+async function getLogEvents(region: string, logGroup: string | undefined): Promise<[number, number] | undefined> {
 	assert(region, 'region is required');
 	assert(logGroup, 'logGroup is required');
 	const client = new CloudWatchLogsClient({ region: region });
@@ -23,12 +23,16 @@ async function getLogEvents(region: string, logGroup: string | undefined): Promi
 		const queryId: string | undefined = response.queryId;
 
 		if (queryId) {
-			setTimeout(async () => {
-				const stats: [number, number] = await processQuery(queryId, client);
-				console.log(logGroup);
-				console.log(`Max Memory Used Messages: ${stats[0]}`);
-				console.log(`Messages Processed: ${stats[1]}`);
-			}, 60000);
+			return new Promise<[number, number]>((resolve, reject) => {
+				try {
+					setTimeout(async () => {
+						const stats: [number, number] = await processQuery(queryId, client);
+						resolve(stats);
+					}, 60000);
+				} catch (err) {
+					reject(err);
+				}
+			});
 		}
 	} catch (err) {
 		if (err instanceof ResourceNotFoundException) {
