@@ -23,9 +23,11 @@ async function getLogEvents(region: string, logGroup: string | undefined): Promi
 		const queryId: string | undefined = response.queryId;
 
 		if (queryId) {
-			console.log(logGroup);
 			setTimeout(async () => {
-				await processQuery(queryId, client);
+				const stats: [number, number] = await processQuery(queryId, client);
+				console.log(logGroup);
+				console.log(`Max Memory Used Messages: ${stats[0]}`);
+				console.log(`Messages Processed: ${stats[1]}`);
 			}, 60000);
 		}
 	} catch (err) {
@@ -37,22 +39,25 @@ async function getLogEvents(region: string, logGroup: string | undefined): Promi
 	}
 }
 
-async function processQuery(queryId: string, client: CloudWatchLogsClient): Promise<void> {
+async function processQuery(queryId: string, client: CloudWatchLogsClient): Promise<[number, number]> {
 	let results: GetQueryResultsCommandOutput;
+	let stats: [number, number] = [0, 0];
 	const resultsParams: GetQueryResultsCommandInput = {
 		queryId: queryId,
 	};
 	try {
 		results = await client.send(new GetQueryResultsCommand(resultsParams));
 		if (results.results && results.results!.length > 0) {
-			processMessages(results.results);
+			stats = processMessages(results.results);
 		}
 	} catch (err) {
 		console.error(err);
 	}
+
+	return stats;
 }
 
-function processMessages(results: ResultField[][]): void {
+function processMessages(results: ResultField[][]): [number, number] {
 	let maxMemoryUsedCount: number = 0;
 	let messageCount: number = 0;
 	for (const result of results) {
@@ -68,6 +73,8 @@ function processMessages(results: ResultField[][]): void {
 
 	console.log(`Messages Processed: ${messageCount}`);
 	console.log(`Max Memory Used Messages: ${maxMemoryUsedCount}`);
+
+	return [maxMemoryUsedCount, messageCount];
 }
 
 function checkMemoryMaxed(message: string): boolean {
