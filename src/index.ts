@@ -17,10 +17,10 @@ function main() {
 		promiseList.push(listLambdas(region));
 	}
 
-	Promise.all(promiseList).then((results: FunctionConfiguration[][]) => {
+	Promise.all(promiseList).then(async (results: FunctionConfiguration[][]) => {
 		for (const regionIdx in results) {
 			for (const lambda of results[regionIdx]) {
-				getLogEvents(regionList[regionIdx], `/aws/lambda/${lambda.FunctionName}`);
+				await getLogEvents(regionList[regionIdx], `/aws/lambda/${lambda.FunctionName}`);
 			}
 		}
 	});
