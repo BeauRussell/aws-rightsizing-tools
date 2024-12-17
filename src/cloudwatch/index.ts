@@ -42,9 +42,13 @@ async function processQuery(queryId: string, client: CloudWatchLogsClient): Prom
 	const resultsParams: GetQueryResultsCommandInput = {
 		queryId: queryId,
 	};
-	results = await client.send(new GetQueryResultsCommand(resultsParams));
-	if (results.results && results.results!.length > 0) {
-		processMessages(results.results);
+	try {
+		results = await client.send(new GetQueryResultsCommand(resultsParams));
+		if (results.results && results.results!.length > 0) {
+			processMessages(results.results);
+		}
+	} catch (err) {
+		console.error(err);
 	}
 }
 
@@ -55,7 +59,7 @@ function processMessages(results: ResultField[][]): void {
 		for (const field of result) {
 			if (field.field === "@message") {
 				messageCount++;
-				if (checkMemoryMaxed(field.value)) {
+				if (checkMemoryMaxed(field.value!)) {
 					maxMemoryUsedCount++;
 				}
 			}
@@ -75,9 +79,8 @@ function checkMemoryMaxed(message: string): boolean {
 		if (maxMemoryUsed >= memorySize) {
 			return true;
 		}
-	} else {
-		return false;
-	}
+	} 
+	return false;
 }
 
 export { getLogEvents };
