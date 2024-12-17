@@ -28,7 +28,7 @@ async function getLogEvents(region: string, logGroup: string | undefined): Promi
 					setTimeout(async () => {
 						const stats: [number, number] = await processQuery(queryId, client);
 						resolve(stats);
-					}, 60000);
+					}, 10000);
 				} catch (err) {
 					reject(err);
 				}
