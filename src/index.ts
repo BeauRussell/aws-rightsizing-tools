@@ -1,6 +1,10 @@
 import { listLambdas } from "./lambda/index.js";
 import { getLogEvents } from "./cloudwatch/index.js";
 import { FunctionConfiguration } from "@aws-sdk/client-lambda";
+import pLimit from "p-limit";
+
+const CONCURRENCY_LIMIT = 100;
+const limit = pLimit(CONCURRENCY_LIMIT);
 
 const regionList: string[] = [
 	"us-east-1",
@@ -25,7 +29,7 @@ function main() {
 		}[] =[];
 		for (const regionIdx in results) {
 			for (const lambda of results[regionIdx]) {
-				const queryInfo: Promise<[number, number]| undefined> = getLogEvents(regionList[regionIdx], `/aws/lambda/${lambda.FunctionName}`);
+				const queryInfo: Promise<[number, number]| undefined> = limit(() => getLogEvents(regionList[regionIdx], `/aws/lambda/${lambda.FunctionName}`));
 				lambdaInfo.push({
 					region: regionList[regionIdx],
 					lambda: lambda.FunctionName!,

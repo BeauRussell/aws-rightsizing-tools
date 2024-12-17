@@ -10,6 +10,8 @@
     "@aws-sdk/client-lambda": "^3.712.0",
     "@types/aws-lambda": "^8.10.146",
     "@types/node": "^22.10.2",
-    "aws-sdk": "^2.1692.0"
+    "aws-sdk": "^2.1692.0",
+    "cli-progress": "^3.12.0",
+    "p-limit": "^6.1.0"
   }
 }
