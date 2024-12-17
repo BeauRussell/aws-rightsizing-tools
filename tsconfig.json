@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
-    "outDir": "./dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true
+    "module": "nodenext",          // Use ES Modules
+    "target": "ES2022",          // Target modern JS
+    "moduleResolution": "nodenext", // Node.js ESM resolution
+    "outDir": "./dist",          // Output directory
+    "esModuleInterop": true,     // Allow default import from CommonJS
+    "skipLibCheck": true,        // Skip type checking of dependencies
+    "strict": true               // Enable strict mode
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*.ts"],    // Include source files
 }
