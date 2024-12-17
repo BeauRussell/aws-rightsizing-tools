@@ -71,9 +71,6 @@ function processMessages(results: ResultField[][]): [number, number] {
 		}
 	}
 
-	console.log(`Messages Processed: ${messageCount}`);
-	console.log(`Max Memory Used Messages: ${maxMemoryUsedCount}`);
-
 	return [maxMemoryUsedCount, messageCount];
 }
 
