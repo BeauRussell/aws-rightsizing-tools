@@ -29,7 +29,13 @@ async function getLogEvents(region: string, logGroup: string | undefined): Promi
 					queryId: queryId,
 				};
 				results  = await client.send(new GetQueryResultsCommand(resultsParams));
-				console.log(results);
+				if (results.results && results.results!.length > 0) {
+					console.log(results.results);
+					console.log(results.results[0]);
+					console.log(results.results[0][0]);
+					console.log(results.results[0][0].value);
+					console.log(results.results[0][0].field);
+				}
 			}, 60000);
 		}
 	} catch (err) {
