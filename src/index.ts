@@ -47,7 +47,9 @@ async function main() {
     const lambdaInfo: {
         region: string;
         lambda: string;
-        stats: [number, number] | undefined;
+		maxMemoryUsedCount: number;
+		messageCount: number;
+		percentMaxMemoryUsed: number;
     }[] = [];
 
     const totalLambdas = results.reduce((acc, curr) => acc + curr.length, 0);
@@ -70,11 +72,16 @@ async function main() {
         for (const lambda of results[regionIdx]) {
             const processingPromise = limit(async () => {
                 try {
-                    const stats = await getLogEvents(regionList[regionIdx], `/aws/lambda/${lambda.FunctionName}`);
+                    let stats = await getLogEvents(regionList[regionIdx], `/aws/lambda/${lambda.FunctionName}`);
+					if (!stats) {
+						stats = [0, 0];
+					}
                     const info = {
                         region: regionList[regionIdx],
                         lambda: lambda.FunctionName!,
-                        stats: stats,
+                        maxMemoryUsedCount: stats[0],
+						messageCount: stats[1],
+						percentMaxMemoryUsed: stats[1] === 0 ? 0 : (stats[0] / stats[1]) * 100
                     };
 
                     lambdaInfo.push(info);
@@ -82,7 +89,9 @@ async function main() {
 
                     // Append each resolved item to the JSON file
                     const isLast = completedCount === totalLambdas;
-                    await appendToFile(filePath, info, isLast);
+					if (stats[1] !== 0) {
+                    	await appendToFile(filePath, info, isLast);
+					}
 
                     // Update the progress bar
                     progressBar.update(completedCount);
